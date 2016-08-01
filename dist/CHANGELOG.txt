@@ -1,0 +1,11 @@
+v1.1.1
+Fixed bug in error handling.
+
+v1.1
+Removed laser on/off button.
+Implemented colored text in output box for better visibility.
+Prevent setting update frequency to 0 or lower.
+More useful help text.
+
+v1.0
+Launch!

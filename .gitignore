@@ -1,0 +1,5 @@
+*.pyc
+*.ui
+verdilog.csv
+build/
+*.iss
