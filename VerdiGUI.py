@@ -1,16 +1,5 @@
-######################################################################################
-#                                                                                    #
-# Verdi GUI is a small tool to interface with a Coherent Verdi laser through Serial  #
-# Verdi GUI is distributed under the MIT Expat License                               #
-#                                                                                    #
-######################################################################################
-
-# comments are ultra-detailed because they are intended to be read by Python-newbies
-
-# Import Python libraries
-# Two non-standard libraries are used; they can be downloaded as follows:
-#    PyQt4: https://www.riverbankcomputing.com/software/pyqt/download
-#    PySerial: https://pypi.python.org/pypi/pyserial
+# Verdi GUI is a small tool to interface with a Coherent Verdi laser through Serial
+# Verdi GUI is distributed under the MIT Expat License
 
 from PyQt4 import QtCore, QtGui
 import os, serial, sys, time
@@ -28,7 +17,6 @@ from verdifault import Ui_Form as Fault_Form
 from verdiname import Ui_Form as Name_Form
 from verdiwindow import Ui_Form as Window_Form
 
-# Initiate the Verdi class
 # Verdi class contains information and methods that directly deal with the laser:
 #    1. All methods that handle serial communication (establishing connection, sending, receiving)
 #    2. It also contains information obtained from laser status updates
@@ -176,6 +164,7 @@ class Verdi(object):
                     if reply == "No response received.":
                         reply = "N/A"
                     exec ("".join(["self.", stat, " = reply"]))
+                self.checkPower()
             else:
                 fault = self.fault
                 window.triggerFault(fault, self.FAULTS[fault])
@@ -270,7 +259,7 @@ class ConnectWindow(QtGui.QWidget, Connect_Form):
                  "To try again at a later time, use the command \"-scan\".")
         self.hide()
 
-# Create the documentation pop-up window class
+# Create the documentation pop-up window
 
 class DocWindow(QtGui.QWidget, Doc_Form):
     def __init__(self, parent=None):
@@ -278,23 +267,23 @@ class DocWindow(QtGui.QWidget, Doc_Form):
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(':/icon/verdigui.ico'))
 
-# Create the fault pop-up window class
+# Create the fault pop-up window
 
 class FaultWindow(QtGui.QWidget, Fault_Form):
-    # this is the fault pop up window
     def __init__(self, parent=None):
         super(FaultWindow, self).__init__(parent)
         QtGui.QMainWindow.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         self.setupUi(self)
         self.setWindowIcon(QtGui.QIcon(':/icon/verdigui.ico'))
-        self.pushButton.clicked.connect(self.clearFault)    # assign a handler to the one button
+        self.pushButton.clicked.connect(self.clearFault)
 
     def clearFault(self):
-        verdi.send("L = 1")                     # tell laser to clear the fault screen
-        verdi.read()                            # get rid of a line, since it will echo the command
-        window.timer.start(window.interval)     # restart auto-update timer
-        window.checkShutter()                   # in case this state has changed
-        self.hide()                             # close fault window
+        # tell the laser that the fault is (probably) cleared
+        verdi.send("L = 1")
+        verdi.read()
+        window.timer.start(window.interval)
+        window.checkShutter()
+        self.hide()
 
 # Create the export pop-up window
 # This window request the user's name, then logs laser stats
@@ -312,19 +301,17 @@ class NameWindow(QtGui.QWidget, Name_Form):
         self.cancel_btn.clicked.connect(self.hide)
 
     def exportData(self):
-        # if user manages to successfully type a name, record that name along with all the stats and operating
-        # hours, add them all to a csv file, then close the pop-up
+        # record user's name and log that name, along with all the stats, to the log file
         name = str(self.name_box.text()).strip()
         if len(name) == 0:      # catch empty strings
             return
         else:
-            verdi.getHours()    # update the operating hours for laser head and diodes
+            verdi.getHours()
             try:
                 # try to open the file
                 log = open("verdilog.csv")
             except IOError:
-                # an IOError would mean that the file does not exist. In this case, create the file,
-                # open it in "append" mode, and add a header column to the file
+                # an IOError would mean that the file does not exist, so create one
                 log = open("verdilog.csv", "a")
                 cols = ("TIME,LOGGER,POWER,AVG CURRENT,D1 CURRENT,D2 CURRENT,D1 HEATSINK,D2 HEATSINK,"
                         "ETALON,VANADATE,LBO,HEAD HRS,D1 HRS, D2 HRS\n")
@@ -333,8 +320,7 @@ class NameWindow(QtGui.QWidget, Name_Form):
                 # if file already exists, switch to "append" mode
                 log = open("verdilog.csv", "a")
             finally:
-                # now the file is open
-                # format the stats and append them to the file
+                # now that the file definitely exists and is open, format stats and append them to the file
                 datetime = time.strftime("%Y-%m-%d %H:%M:%S")
                 stats = (datetime, name, str(verdi.powerValue), verdi.C, verdi.D1C, verdi.D2C, verdi.D1HST, verdi.D2HST,
                          verdi.ET, verdi.VT, verdi.LBOT, verdi.HH, verdi.D1H, verdi.D2H)
@@ -357,8 +343,7 @@ class NameWindow(QtGui.QWidget, Name_Form):
                 window.pblue("".join(["Current stats have been logged to ", path, "\\verdilog.csv"]))
             self.hide()
 
-# Main UI window class
-# All functions pertaining to GUI operation are here
+# Main UI window
 
 class MainWindow(QtGui.QWidget, Window_Form):
 
@@ -386,11 +371,11 @@ class MainWindow(QtGui.QWidget, Window_Form):
         global verdi
         verdi = Verdi()
 
-        self.assignHandlers()      # assign handlers to all the buttons & UI elements
-        self.createTooltips()      # add helpful tooltips to everything
-        self.updateAll()           # get laser health stats from the laser
-        self.checkShutter()        # get laser's shutter status
-        self.formatPower()         # get laser's power and display it in the LCD
+        self.assignHandlers()
+        self.createTooltips()
+        self.updateAll()
+        self.checkShutter()
+        self.formatPower()
 
         # initialize the auto-update timer with default interval of 5 seconds
         self.interval = 2000
@@ -420,6 +405,7 @@ class MainWindow(QtGui.QWidget, Window_Form):
         self.power_down.clicked.connect(self.powerDown)
 
     def createTooltips(self):
+        # add helpful tooltips to everything
         self.power_up.setToolTip("Increase the laser power by 10 mW.")
         self.power_down.setToolTip("Decrease the laser power by 10 mW.")
         self.shutter_btn.setToolTip("Shutter is currently CLOSED. Click to OPEN.")
@@ -435,7 +421,7 @@ class MainWindow(QtGui.QWidget, Window_Form):
         self.LBOT_box.setToolTip("Measured temperature, in degrees Celsius, of the LBO crystal.")
         self.doc_btn.setToolTip("Open the full list of commands.")
 
-    # print colorful messages
+    # print colorful messages for better visibility
     def pblack(self, msg):
         msg = "".join(["<span style=\"color: ", self.COLORS["black"], ";\">", msg, "</span>"])
         self.output_box.append(msg)
@@ -636,9 +622,7 @@ class MainWindow(QtGui.QWidget, Window_Form):
         self.fault_popup.show()
         self.timer.stop()   # temporarily suspend the update timer
 
-# create a class whose sole purpose is to register a global mutex
-# this will allow the program to prevent duplicate windows
-
+# prevent duplicate windows by registered a mutex
 class Singleton:
 
     def __init__(self):
@@ -652,7 +636,6 @@ class Singleton:
         if self.mutex:
             CloseHandle(self.mutex)
 
-# standard Python voodoo to make the program executable
 if __name__ == "__main__":
     # check for pre-existing window immediately; kill new window if it is a duplicate
     instance = Singleton()
