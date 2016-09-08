@@ -8,5 +8,7 @@ Written by Lise Savard for the UBC Nanostructures Research Group lab.
 Dependencies:
 
 Python 2.7: https://www.python.org/downloads/release/python-2712/
+
 PyQt4: https://www.riverbankcomputing.com/software/pyqt/download
+
 PySerial: https://pypi.python.org/pypi/pyserial
