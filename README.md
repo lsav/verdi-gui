@@ -1,7 +1,14 @@
 # verdi-gui
 
-Small Python program to interface a Windows PC with a Coherent Verdi series laser. Allows for laser control, monitoring and logging
-of laser health stats.
+## Disclaimer
+
+I wrote this program before I learned anything about programming. It is horribly designed and dangerously brittle and I strongly recommend against using it for anything. This repo is staying around only as a reference.
+
+Seriously, don't use it.
+
+---
+
+Small Python program to interface a Windows PC with a Coherent Verdi series laser. Allows for laser control, monitoring and logging of laser health stats.
 
 Written by Lise Savard for the UBC Nanostructures Research Group lab.
 
