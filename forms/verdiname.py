@@ -36,6 +36,14 @@ class Ui_Form(object):
         self.name_box = QtGui.QLineEdit(Form)
         self.name_box.setObjectName(_fromUtf8("name_box"))
         self.verticalLayout.addWidget(self.name_box)
+		
+        self.comment_label = QtGui.QLabel(Form)
+        self.comment_label.setObjectName(_fromUtf8("comment_label"))
+        self.verticalLayout.addWidget(self.comment_label)
+        self.comment_box = QtGui.QLineEdit(Form)
+        self.comment_box.setObjectName(_fromUtf8("comment_box"))
+        self.verticalLayout.addWidget(self.comment_box)
+		
         self.frame = QtGui.QFrame(Form)
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
@@ -63,6 +71,9 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Name", None))
         self.label.setText(_translate("Form", "Enter your name:", None))
         self.name_box.setPlaceholderText(_translate("Form", "Your name", None))
+		
+        self.comment_label.setText(_translate("Form", "Comment (optional):", None))
+		
         self.okay_btn.setText(_translate("Form", "Okay", None))
         self.cancel_btn.setText(_translate("Form", "Cancel", None))
 

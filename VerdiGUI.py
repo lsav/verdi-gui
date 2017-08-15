@@ -303,6 +303,7 @@ class NameWindow(QtGui.QWidget, Name_Form):
     def exportData(self):
         # record user's name and log that name, along with all the stats, to the log file
         name = str(self.name_box.text()).strip()
+        comment = str(self.comment_box.text()).strip()
         if len(name) == 0:      # catch empty strings
             return
         else:
@@ -314,7 +315,7 @@ class NameWindow(QtGui.QWidget, Name_Form):
                 # an IOError would mean that the file does not exist, so create one
                 log = open("verdilog.csv", "a")
                 cols = ("TIME,LOGGER,POWER,AVG CURRENT,D1 CURRENT,D2 CURRENT,D1 HEATSINK,D2 HEATSINK,"
-                        "ETALON,VANADATE,LBO,HEAD HRS,D1 HRS, D2 HRS\n")
+                        "BASEPLATE,ETALON,VANADATE,LBO,HEAD HRS,D1 HRS, D2 HRS, COMMENT\n")
                 log.write(cols)
             else:
                 # if file already exists, switch to "append" mode
@@ -323,7 +324,7 @@ class NameWindow(QtGui.QWidget, Name_Form):
                 # now that the file definitely exists and is open, format stats and append them to the file
                 datetime = time.strftime("%Y-%m-%d %H:%M:%S")
                 stats = (datetime, name, str(verdi.powerValue), verdi.C, verdi.D1C, verdi.D2C, verdi.D1HST, verdi.D2HST,
-                         verdi.ET, verdi.VT, verdi.LBOT, verdi.HH, verdi.D1H, verdi.D2H)
+                         verdi.BT, verdi.ET, verdi.VT, verdi.LBOT, verdi.HH, verdi.D1H, verdi.D2H, comment)
                 writestring = ",".join(stats)
                 try:
                     log.write(writestring + "\n")
