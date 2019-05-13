@@ -1,6 +1,5 @@
 *.pyc
 *.ui
-verdilog.csv
-runverdi.cmd
 build/
+dist/
 *.iss

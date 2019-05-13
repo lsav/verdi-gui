@@ -1,19 +1,31 @@
 # verdi-gui
 
-##
-
 Small Python program to interface a Windows PC with a Coherent Verdi series laser. Allows for laser control, monitoring and logging of laser health stats.
 
-Written by Lise Savard for the UBC Nanostructures Research Group lab.
+## Usage
 
-Dependencies:
+Just run the installer found in `installer/VerdiGUI-setup.exe`. No other installations needed.
 
-Python 2.7: https://www.python.org/downloads/release/python-2712/
-
-PyQt4: https://www.riverbankcomputing.com/software/pyqt/download
-
-PySerial: https://pypi.python.org/pypi/pyserial
+Don't trust weird executables from github? Yeah, I wouldn't either. You can run it as a python script, but will need to install Python2.7 and follow the instructions below to install the other dependencies.
 
 ## Changes
 
 August 2017: add baseplate temperature to logfiles, allow adding a comment when making a log.
+
+May 2019: commit Windows installer.
+
+## Development
+
+### Dependencies
+
+`pip install requirements.txt`
+
+Also needs PyQt4. Installer here: [Sourceforge](https://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.4/)
+
+### Building
+
+To create a standalone exe:
+
+`pyinstaller build.spec`
+
+Whatever setup utility you like to create an installer. I used [Innosetup](http://www.jrsoftware.org/isinfo.php).
