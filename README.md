@@ -4,9 +4,9 @@ Small Python program to interface a Windows PC with a Coherent Verdi series lase
 
 ## Usage
 
-Just run the installer found in `installer/VerdiGUI-setup.exe`. No other installations needed.
+Just run the installer found at `installer/verdigui-setup-1.1.2.exe`. No other installations needed.
 
-Don't trust weird executables from github? Yeah, I wouldn't either. You can run it as a python script, but will need to install Python2.7 and follow the instructions below to install the other dependencies.
+Don't trust weird executables from github? You can run it as a python script, but will need to install Python 2.7 and follow the instructions below to install the other dependencies.
 
 ## Changes
 
